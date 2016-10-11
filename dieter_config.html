@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>Dieter Pebble App</title>
+<style>
+p {
+  font-family:Arial;
+	font-size:11pt;
+}
+
+h1 {
+	font-family:Arial;
+	font-size:20pt;
+}
+</style>
+ <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+<h1>Dieter Theme Config:</h1>
+<br><br>
+
+<p>Color Theme:
+	<select id="theme" name="theme">
+		<option value="0">Black</option>
+		<option value="1">White</option>
+	</select>
+</p>
+
+<p>Temperature Setting:
+	<select id="degrees" name="degrees">
+		<option value="Celsius">Celsius</option>
+		<option value="Fahrenheit">Fahrenheit</option>
+	</select>
+</p>
+
+
+
+<p>
+	<button id="save_button">Save</button>
+</p>
+
+</body>
+</html>
+
+
+<script>
+
+(function () {
+	loadOptions();
+})();
+
+function loadOptions() {
+	var $theme = $('#theme');
+	var $degrees = $('#degrees');
+
+if (localStorage.theme) {
+		$theme[0].value = localStorage.theme;
+		$degrees[0].value = localStorage.degrees;
+	}
+}
+
+function getAndStoreConfigData() {
+	var $theme = $('#theme');
+	var $degrees = $('#degrees');
+
+	var options = {
+		theme: $theme.val(),
+		degrees: $degrees.val(),
+	};
+
+	localStorage.theme = options.theme;
+	localStorage.degrees = options.degrees;
+
+	console.log('Got options: ' + JSON.stringify(options));
+	return options;
+}
+
+// Something like this to get query variables.
+function getQueryParam(variable, defaultValue) {
+// Find all URL parameters
+var query = location.search.substring(1);
+var vars = query.split('&');
+for (var i = 0; i < vars.length; i++) {
+	var pair = vars[i].split('=');
+
+	// If the query variable parameter is found, decode it to use and return it for use
+	if (pair[0] === variable) {
+		return decodeURIComponent(pair[1]);
+	}
+}
+return defaultValue || false;
+}
+
+
+  //Setup to allow easy adding more options later
+  function saveOptions() {
+
+  var e = document.getElementById("theme");
+  var f = document.getElementById("degrees");
+  
+  var themeValue = e.options[e.selectedIndex].value;
+  var degreesValue = f.options[f.selectedIndex].value;
+
+  var options = {
+      'theme': themeValue,
+      'degrees': degreesValue,
+    }
+    return options;
+  };
+
+ $("#save_button").click(function () {	
+	console.log("Submit");
+	var options = saveOptions();
+    getAndStoreConfigData() 
+  // Set the return URL depending on the runtime environment
+  var return_to = getQueryParam('return_to', 'pebblejs://close#');
+  document.location.href = return_to + encodeURIComponent(JSON.stringify(options));
+ });
+
+</script>

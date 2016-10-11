@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <title>Radium Configuration</title>
+  
+<link rel='stylesheet' type='text/css' href='css/slate.min.css'>
+  
+<script src='js/slate.min.js'></script>
+  
+<style>
+  
+.title {
+    padding: 15px 10px;
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #888888;
+    text-align: center;
+  }
+  
+  
+  
+</style>
+
+</head>
+<body>
+
+<h1 class='title'>Radium Configurator</h1>
+    
+<div class='item-container'>
+<div class='item-container-content'>      
+<div class='item'>
+Use this configuration page to choose the settings you would like.  <p> 
+Please show your support for Pebble Developers and remember to <3 faces you enjoy!        
+</div>
+</div>
+</div>
+    
+<div class='item-container'>
+													
+													
+													<!-- THEME OPTIONS -->  
+													<!-- THEME OPTIONS -->  
+													<!-- THEME OPTIONS -->  
+	
+	
+   	<div class='item-container-header'>Customizability
+	</div>
+	<div class='item-container-content'>
+		<label class='item'>
+          Temperature Setting
+          <select id="weather_type_option" name="face_type_option" dir='rtl' class="item-select">
+			<option value="Fahrenheit">Fahrenheit</option>
+			<option value="Celsius">Celsius</option>
+          </select>
+		</label>
+		
+		<label class='item'>
+          Theme Option
+          <select id="theme_type_option" name="face_type_option" dir='rtl' class="item-select">
+			<option value="detailed">Detailed</option>
+			<option value="simple">Simple</option>
+          </select>
+		</label>
+	
+	</div>  
+	
+	<P><BR><P>
+
+	<div class='item-container-header'>Color Customizability
+	</div>
+	
+	<div class="item-container-content" id="theme_customizer">
+         <label class="item">
+          Outer Empty Color
+          <input type="text" class="item-color item-color-normal" name="outerEmptyPicker" id="outerEmptyPicker" value="0xFFFFFF">
+        </label>
+         <label class="item">
+          Outer Filled Color
+          <input type="text" class="item-color item-color-normal" name="outerFilledPicker" id="outerFilledPicker" value="0xFFFFFF">
+        </label>
+         <label class="item">
+          Tick Empty Color
+          <input type="text" class="item-color item-color-normal" name="tickEmptyPicker" id="tickEmptyPicker" value="0xFFFFFF">
+        </label>
+         <label class="item">
+          Tick Filled Color
+          <input type="text" class="item-color item-color-normal" name="tickFilledPicker" id="tickFilledPicker" value="0xFFFFFF">
+        </label>
+         <label class="item">
+          Background Color
+          <input type="text" class="item-color item-color-normal" name="bgColorPicker" id="bgColorPicker" value="0xFFFFFF">
+        </label>
+         <label class="item">
+          Text Color
+          <input type="text" class="item-color item-color-normal" name="textColorPicker" id="textColorPicker" value="0xFFFFFF">
+        </label>
+	</div>
+</div>
+
+	<P><BR><P>
+<div class='item-container'>
+    <div class='button-container'>  
+	<input id='submit_button' type='button' class='item-button' value='SUBMIT'>  
+	</div>
+	<div class='item-container-footer'> <P><BR><P><Center><B>MicroByter Studios - Radium Config Version 1.0</B></Center></P></BR></P></div>
+</div>
+</body>
+</html>
+
+
+
+<script>
+
+
+
+function getConfigData() {
+    
+	var outerEmptyColor = document.getElementById('outerEmptyPicker');
+	var outerFilledColor = document.getElementById('outerFilledPicker');
+	var tickEmptyColor = document.getElementById('tickEmptyPicker');
+	var tickFilledColor = document.getElementById('tickFilledPicker');
+	var bgColor = document.getElementById('bgColorPicker');
+	var textColor = document.getElementById('textColorPicker');
+    var weatherOption= document.getElementById('weather_type_option');
+    var themeOption= document.getElementById('theme_type_option');
+
+    var options = {
+		'outerEmptyColor' : outerEmptyColor.value,
+		'outerFilledColor' : outerFilledColor.value,
+		'tickEmptyColor' : tickEmptyColor.value,
+		'tickFilledColor' : tickFilledColor.value,
+		'bgColor' : bgColor.value,
+		'textColor' : textColor.value,
+		'weatherOption': weatherOption.value,
+		'themeOption': themeOption.value,
+	};
+
+    // Save for next launch
+    localStorage['outerEmptyColor'] = options['outerEmptyColor'];
+    localStorage['outerFilledColor'] = options['outerFilledColor'];
+    localStorage['tickEmptyColor'] = options['tickEmptyColor'];
+    localStorage['tickFilledColor'] = options['tickFilledColor'];
+    localStorage['bgColor'] = options['bgColor'];
+    localStorage['textColor'] = options['textColor'];
+    localStorage['weatherOption'] = options['weatherOption'];
+    localStorage['themeOption'] = options['themeOption'];
+
+    console.log('Got options: ' + JSON.stringify(options));
+    return options;
+  }
+
+  function getQueryParam(variable, defaultValue) {
+    var query = location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (pair[0] === variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+    return defaultValue || false;
+  }
+ 
+  var submitButton = document.getElementById('submit_button');
+  submitButton.addEventListener('click', function() {
+    console.log('Submit');
+
+    // Set the return URL depending on the runtime environment
+    var return_to = getQueryParam('return_to', 'pebblejs://close#');
+    document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
+  });
+
+  (function() {
+	var outerEmptyColor= document.getElementById('outerEmptyColor');
+	var outerFilledColor= document.getElementById('outerFilledColor');
+	var tickEmptyColor= document.getElementById('tickEmptyColor');
+	var tickFilledColor= document.getElementById('tickFilledColor');
+	var bgColor= document.getElementById('bgColor');
+	var textColor= document.getElementById('textColor');
+    var weatherOption = document.getElementById('weatherOption');
+    var themeOption = document.getElementById('themeOption');
+
+	
+    // Load any previously saved configuration, if available
+    if(localStorage['bgColor']) {
+		bgColorPicker.value = localStorage['bgColor'];
+		outerEmptyPicker.value = localStorage['outerEmptyColor'];
+		outerFilledPicker.value = localStorage['outerFilledColor'];
+		tickEmptyPicker.value = localStorage['tickEmptyColor'];
+		tickFilledPicker.value = localStorage['tickFilledColor'];
+		textColorPicker.value = localStorage['textColor'];
+		weather_type_option.value = localStorage['weatherOption'];
+		theme_type_option.value = localStorage['themeOption'];
+    }
+
+
+	
+ })();
+  </script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

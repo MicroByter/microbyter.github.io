@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <title>What Time is It? Configuration</title>
+  
+<link rel='stylesheet' type='text/css' href='css/slate.min.css'>
+  
+<script src='js/slate.min.js'></script>
+  
+<style>
+  
+.title {
+    padding: 15px 10px;
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #888888;
+    text-align: center;
+  }
+  
+  
+  
+</style>
+
+</head>
+<body>
+
+<h1 class='title'>What Time Is It? Configurator</h1>
+    
+<div class='item-container'>
+<div class='item-container-content'>      
+<div class='item'>
+Use this configuration page to choose the settings you would like.  <p> 
+Please show your support for Pebble Developers and remember to <3 faces you enjoy!        
+</div>
+</div>
+</div>
+    
+<div class='item-container'>
+													
+													
+													<!-- THEME OPTIONS -->  
+													<!-- THEME OPTIONS -->  
+													<!-- THEME OPTIONS -->  
+	
+	
+   	<div class='item-container-header'>Customizability
+	</div>
+	<div class='item-container-content'>
+		<label class='item'>
+          Scene
+          <select id="select_option" name="select_option" dir='rtl' class="item-select">
+			<option value="0">Random</option>
+			<option value="1">Finn, Jake, PB</option>
+ 			<option value="2">Finn</option>
+ 			<option value="3">Jake</option>
+ 			<option value="4">Finn & Jake</option>
+ 			<option value="5">Marceline</option>
+ 			<option value="6">Finn, PB, Jake, Lady</option>
+ 			<option value="7">Gunter</option>
+ 			<option value="8">Finn & Jake Split</option>
+ 			<option value="9">BMO</option>
+ 			<option value="10">LSP</option>
+ 			<option value="11">Collage</option>
+ 			<option value="12">Ice King & Gunter</option>
+          </select>
+		</label>
+		<label class='item'>
+          Random Rotation Frequency
+          <select id="rotate_option" name="rotate_option" dir='rtl' class="item-select">
+			<option value="5">5 Mins</option>
+			<option value="10">10 Mins</option>
+			<option value="15">15 Mins</option>
+			<option value="30">30 Mins</option>
+ 			<option value="60">Every Hour</option>
+          </select>
+		</label>
+		<label class='item'>
+          Show Analog
+          <select id="analog_option" name="analog_option" dir='rtl' class="item-select">
+			<option value="Y">Yes</option>
+			<option value="N">No</option>
+          </select>
+		</label>
+		<label class='item'>
+          Show Digital
+          <select id="digital_option" name="digital_option" dir='rtl' class="item-select">
+			<option value="Y">Yes</option>
+			<option value="N">No</option>
+          </select>
+		</label>
+		
+	</div>  
+	
+	<P><BR><P>
+
+</div>
+
+	<P><BR><P>
+<div class='item-container'>
+    <div class='button-container'>  
+	<input id='submit_button' type='button' class='item-button' value='SUBMIT'>  
+	</div>
+	<div class='item-container-footer'> <P><BR><P><Center><B>MicroByter Studios - What Time Is It? Config Version 1.0</B></Center></P></BR></P></div>
+	
+	<center>
+	Enjoy my watchfaces and feel generous?
+	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+	<input type="hidden" name="cmd" value="_s-xclick">
+	<input type="hidden" name="hosted_button_id" value="94X94B3M2HS6N">
+	<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+	<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+	</form>
+	</center>
+
+</div>
+</body>
+</html>
+
+
+
+<script>
+
+
+
+function getConfigData() {
+    
+	var selectOption = document.getElementById('select_option');
+	var rotateOption = document.getElementById('rotate_option');
+	var analogOption = document.getElementById('analog_option');
+	var digitalOption = document.getElementById('digital_option');
+	
+    var options = {
+		'selectOption' : selectOption.value,
+		'rotateOption' : rotateOption.value,
+		'analogOption' : analogOption.value,
+		'digitalOption' : digitalOption.value,
+	};
+
+    // Save for next launch
+    localStorage['selectOption'] = options['selectOption'];
+    localStorage['rotateOption'] = options['rotateOption'];
+    localStorage['analogOption'] = options['analogOption'];
+    localStorage['digitalOption'] = options['digitalOption'];
+
+    console.log('Got options: ' + JSON.stringify(options));
+    return options;
+  }
+
+  function getQueryParam(variable, defaultValue) {
+    var query = location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split('=');
+      if (pair[0] === variable) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+    return defaultValue || false;
+  }
+ 
+  var submitButton = document.getElementById('submit_button');
+  submitButton.addEventListener('click', function() {
+    console.log('Submit');
+
+    // Set the return URL depending on the runtime environment
+    var return_to = getQueryParam('return_to', 'pebblejs://close#');
+    document.location = return_to + encodeURIComponent(JSON.stringify(getConfigData()));
+  });
+
+  (function() {
+	var selectOption= document.getElementById('selectOption');
+	var rotateOption= document.getElementById('rotateOption');
+
+	
+    // Load any previously saved configuration, if available
+    if(localStorage['selectOption']) {
+		select_option.value = localStorage['selectOption'];
+		rotate_option.value = localStorage['rotateOption'];
+		analog_option.value = localStorage['analogOption'];
+		digital_option.value = localStorage['digitalOption'];
+    }
+
+	if(select_option.value == "") {
+		select_option.value = "0";
+	}
+
+	if(rotate_option.value == "") {
+		rotate_option.value = "30";
+	}
+	if(analog_option.value == "") {
+		analog_option.value = "Y";
+	}
+	if(digital_option.value == "") {
+		digital_option.value = "N";
+	}
+	
+ })();
+  </script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

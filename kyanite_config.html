@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>Temperature Configurator</title>
+<style>
+p {
+  font-family:Arial;
+	font-size:11pt;
+}
+
+h1 {
+	font-family:Arial;
+	font-size:20pt;
+}
+</style>
+ <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+<h1>Temperature Config:</h1>
+<br><br>
+<p>Temperature Setting:
+	<select id="degrees" name="background">
+		<option value="Celsius">Celsius</option>
+		<option value="Fahrenheit">Fahrenheit</option>
+	</select>
+</p>
+
+
+<p>
+	<button id="save_button">Save</button>
+</p>
+
+</body>
+</html>
+
+
+<script>
+
+(function () {
+	loadOptions();
+})();
+
+function loadOptions() {
+	var $degrees = $('#degrees');
+
+if (localStorage.degrees) {
+		$degrees[0].value = localStorage.degrees;
+	}
+}
+
+function getAndStoreConfigData() {
+	var $degrees = $('#degrees');
+	
+	var options = {
+		degrees: $degrees.val(),
+	};
+
+	localStorage.degrees = options.degrees;
+
+	console.log('Got options: ' + JSON.stringify(options));
+	return options;
+}
+
+// Something like this to get query variables.
+function getQueryParam(variable, defaultValue) {
+// Find all URL parameters
+var query = location.search.substring(1);
+var vars = query.split('&');
+for (var i = 0; i < vars.length; i++) {
+	var pair = vars[i].split('=');
+
+	// If the query variable parameter is found, decode it to use and return it for use
+	if (pair[0] === variable) {
+		return decodeURIComponent(pair[1]);
+	}
+}
+return defaultValue || false;
+}
+
+
+
+
+  //Setup to allow easy adding more options later
+  function saveOptions() {
+
+  var e = document.getElementById("degrees");
+  
+  var degrees = e.options[e.selectedIndex].value;
+
+  var options = {
+      'degrees': degrees,
+    }
+    return options;
+  };
+
+ $("#save_button").click(function () {	
+	console.log("Submit");
+	var options = saveOptions();
+    getAndStoreConfigData() 
+  // Set the return URL depending on the runtime environment
+  var return_to = getQueryParam('return_to', 'pebblejs://close#');
+  document.location.href = return_to + encodeURIComponent(JSON.stringify(options));
+ });
+
+</script>

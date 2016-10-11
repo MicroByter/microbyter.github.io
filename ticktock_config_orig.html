@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>TicToc Pebble App</title>
+<style>
+p {
+  font-family:Arial;
+	font-size:11pt;
+}
+
+h1 {
+	font-family:Arial;
+	font-size:20pt;
+}
+</style>
+ <script src="http://code.jquery.com/jquery.js"></script>
+</head>
+<body>
+<h1>Tic Toc Config:</h1>
+<br><br>
+
+<p>Color Theme:
+	<select id="theme" name="theme">
+		<option value="0">Black</option>
+		<option value="1">White</option>
+	</select>
+</p>
+
+<p>Left City:
+	<select id="lcity" name="lcity">
+		<option value=0>ANCHORAGE</option>
+		<option value=1>ATHENS</option>
+		<option value=2>BANGKOK</option>
+		<option value=3>BEIJING</option>
+		<option value=4>BEIRUT</option>
+		<option value=5>BRUSSELS</option>
+		<option value=6>CAIRO</option>
+		<option value=7>DALLAS</option>
+		<option value=8>HONOLULU</option>
+		<option value=9>LONDON</option>
+		<option value=10>LOS ANGELES</option>
+		<option value=11>MADRID</option>
+		<option value=12>MANILA</option>
+		<option value=13>MOSCOW</option>
+		<option value=14>NEW DELHI</option>
+		<option value=15>OSLO</option>
+		<option value=16>PARIS</option>
+		<option value=17>RIYADH</option>
+		<option value=18>SEOUL</option>
+		<option value=19>SINGAPORE</option>
+		<option value=20>SYDNEY</option>
+		<option value=21>TOKYO</option>
+		<option value=22>VATICAN CITY</option>
+		<option value=23>WASHINGTON DC</option>
+		<option value=24>ZURICH</option>
+	</select>
+</p>
+
+<p>Right City:
+	<select id="rcity" name="rcity">
+		<option value="0">ANCHORAGE</option>
+		<option value="1">ATHENS</option>
+		<option value="2">BANGKOK</option>
+		<option value="3">BEIJING</option>
+		<option value="4">BEIRUT</option>
+		<option value="5">BRUSSELS</option>
+		<option value="6">CAIRO</option>
+		<option value="7">DALLAS</option>
+		<option value="8">HONOLULU</option>
+		<option value="9">LONDON</option>
+		<option value="10">LOS ANGELES</option>
+		<option value="11">MADRID</option>
+		<option value="12">MANILA</option>
+		<option value="13">MOSCOW</option>
+		<option value="14">NEW DELHI</option>
+		<option value="15">OSLO</option>
+		<option value="16">PARIS</option>
+		<option value="17">RIYADH</option>
+		<option value="18">SEOUL</option>
+		<option value="19">SINGAPORE</option>
+		<option value="20">SYDNEY</option>
+		<option value="21">TOKYO</option>
+		<option value="22">VATICAN CITY</option>
+		<option value="23">WASHINGTON DC</option>
+		<option value="24">ZURICH</option>
+	</select>
+</p>
+
+
+<p>
+	<button id="save_button">Save</button>
+</p>
+
+</body>
+</html>
+
+
+<script>
+
+(function () {
+	loadOptions();
+})();
+
+function loadOptions() {
+	var $theme = $('#theme');
+	var $lcity = $('#lcity');
+	var $rcity = $('#rcity');
+
+if (localStorage.theme) {
+		$theme[0].value = localStorage.theme;
+		$lcity[0].value = localStorage.lcity;
+		$rcity[0].value = localStorage.rcity;
+	}
+}
+
+function getAndStoreConfigData() {
+	var $theme = $('#theme');
+	var $lcity = $('#lcity');
+	var $rcity = $('#rcity');
+
+	var options = {
+		theme: $theme.val(),
+		lcity: $lcity.val(),
+		rcity: $rcity.val(),
+	};
+
+	localStorage.theme = options.theme;
+	localStorage.lcity = options.lcity;
+	localStorage.rcity = options.rcity;
+
+	console.log('Got options: ' + JSON.stringify(options));
+	return options;
+}
+
+// Something like this to get query variables.
+function getQueryParam(variable, defaultValue) {
+// Find all URL parameters
+var query = location.search.substring(1);
+var vars = query.split('&');
+for (var i = 0; i < vars.length; i++) {
+	var pair = vars[i].split('=');
+
+	// If the query variable parameter is found, decode it to use and return it for use
+	if (pair[0] === variable) {
+		return decodeURIComponent(pair[1]);
+	}
+}
+return defaultValue || false;
+}
+
+
+  //Setup to allow easy adding more options later
+  function saveOptions() {
+
+  var e = document.getElementById("theme");
+  var f = document.getElementById("lcity");
+  var g = document.getElementById("rcity");
+  
+  var themeValue = e.options[e.selectedIndex].value;
+  var lcityValue = f.options[f.selectedIndex].value;
+  var rcityValue = g.options[g.selectedIndex].value;
+
+  var options = {
+      'theme': themeValue,
+      'lcity': lcityValue,
+      'rcity': rcityValue,
+    }
+    return options;
+  };
+
+ $("#save_button").click(function () {	
+	console.log("Submit");
+	var options = saveOptions();
+    getAndStoreConfigData() 
+  // Set the return URL depending on the runtime environment
+  var return_to = getQueryParam('return_to', 'pebblejs://close#');
+  document.location.href = return_to + encodeURIComponent(JSON.stringify(options));
+ });
+
+</script>
